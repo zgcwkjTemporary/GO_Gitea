@@ -137,7 +137,13 @@ func FastCryptoRandomInt[T int | int64](n T) T {
 	pool := chaCha8RandPool()
 	chaCha8Rand, _ := pool.Get().(*rand2.ChaCha8)
 	defer pool.Put(chaCha8Rand)
-	return rand2.New(chaCha8Rand).N(n)
+	switch v := any(n).(type) {
+	case int:
+		return T(rand2.New(chaCha8Rand).IntN(v))
+	case int64:
+		return T(rand2.New(chaCha8Rand).Int64N(v))
+	}
+	panic("unreachable")
 }
 
 func FastCryptoRand(seed [32]byte) *rand2.Rand {

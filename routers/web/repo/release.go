@@ -49,7 +49,8 @@ func calReleaseNumCommitsBehind(ctx stdCtx.Context, repoCtx *context.Repository,
 	if _, ok := countCache[target]; !ok {
 		commit, err := repoCtx.GitRepo.GetBranchCommit(ctx, target)
 		if err != nil {
-			_, isNotExist := errors.AsType[git.ErrNotExist](err)
+			var notExist git.ErrNotExist
+			isNotExist := errors.As(err, &notExist)
 			if target == repoCtx.Repository.DefaultBranch || !isNotExist {
 				return fmt.Errorf("GetBranchCommit: %w", err)
 			}

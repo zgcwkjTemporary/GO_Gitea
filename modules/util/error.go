@@ -41,7 +41,8 @@ func (w errorForUser) Error() string {
 }
 
 func ErrorUnwrapForUser(err error) (string, int) {
-	if e, ok := errors.AsType[errorForUser](err); ok {
+	var e errorForUser
+	if errors.As(err, &e) {
 		return err.Error(), e.code
 	}
 	return "", 0
@@ -113,7 +114,8 @@ func ErrorWrapTranslatable(err error, trKey string, trArgs ...any) ErrorTranslat
 }
 
 func ErrorAsTranslatable(err error) ErrorTranslatable {
-	if e, ok := errors.AsType[*errorTranslatableWrapper](err); ok {
+	var e *errorTranslatableWrapper
+	if errors.As(err, &e) {
 		return e
 	}
 	return nil

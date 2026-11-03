@@ -468,7 +468,10 @@ func ActivateUserEmail(ctx context.Context, userID int64, email string, activate
 }
 
 func IsEmailDomainAllowed(email string) bool {
-	localPart, _, _ := strings.CutLast(email, "@")
+	localPart := email
+	if at := strings.LastIndexByte(email, '@'); at >= 0 {
+		localPart = email[:at]
+	}
 	if strings.ContainsAny(localPart, "%!") && (len(setting.Service.EmailDomainAllowList) > 0 || len(setting.Service.EmailDomainBlockList) > 0) {
 		return false // percent-hack and bang-path local parts can route mail to a domain other than the listed one
 	}

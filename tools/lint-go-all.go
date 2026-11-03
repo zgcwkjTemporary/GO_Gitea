@@ -97,7 +97,8 @@ func main() {
 		cmd := exec.Command(envGo, slices.Concat([]string{"run", "-exec", "env GOOS=" + goos, envGolangciLintPackage, "run"}, args, os.Args[1:])...)
 		cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
 		err := cmd.Run()
-		if _, isExit := errors.AsType[*exec.ExitError](err); err != nil && !isExit {
+		var isExit *exec.ExitError
+		if err != nil && !errors.As(err, &isExit) {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
 		return err == nil

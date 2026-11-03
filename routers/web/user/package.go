@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-	"uuid"
 
 	"gitea.dev/models/db"
 	org_model "gitea.dev/models/organization"
@@ -36,6 +35,8 @@ import (
 	"gitea.dev/services/forms"
 	packages_service "gitea.dev/services/packages"
 	container_service "gitea.dev/services/packages/container"
+
+	"github.com/google/uuid"
 )
 
 const (

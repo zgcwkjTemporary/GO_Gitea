@@ -36,8 +36,8 @@ func getExitStatusFromError(err error) int {
 		return 0
 	}
 
-	exitErr, ok := errors.AsType[*exec.ExitError](err)
-	if !ok {
+	var exitErr *exec.ExitError
+	if !errors.As(err, &exitErr) {
 		return 1
 	}
 

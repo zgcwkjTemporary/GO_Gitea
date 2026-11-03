@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strings"
 	"sync"
-	"uuid"
 
 	audit_model "gitea.dev/models/audit"
 	"gitea.dev/models/auth"
@@ -22,6 +21,8 @@ import (
 	"gitea.dev/services/audit"
 	"gitea.dev/services/auth/source/sspi"
 	gitea_context "gitea.dev/services/context"
+
+	gouuid "github.com/google/uuid"
 )
 
 const (
@@ -160,7 +161,7 @@ func (s *SSPI) shouldAuthenticate(req *http.Request) (shouldAuth bool) {
 // newUser creates a new user object for the purpose of automatic registration
 // and populates its name and email with the information present in request headers.
 func (s *SSPI) newUser(ctx context.Context, username string, cfg *sspi.Source) (*user_model.User, error) {
-	email := uuid.New().String() + "@localhost.localdomain"
+	email := gouuid.New().String() + "@localhost.localdomain"
 	user := &user_model.User{
 		Name:     username,
 		Email:    email,

@@ -186,11 +186,11 @@ func (l *Label) ExclusiveScope() string {
 	if !l.Exclusive {
 		return ""
 	}
-	scope, name, found := strings.CutLast(l.Name, "/")
-	if !found || scope == "" || name == "" {
+	lastIndex := strings.LastIndex(l.Name, "/")
+	if lastIndex == -1 || lastIndex == 0 || lastIndex == len(l.Name)-1 {
 		return ""
 	}
-	return scope
+	return l.Name[:lastIndex]
 }
 
 // CompareLabelForDisplay compares labels for displaying them in dropdowns or lists.

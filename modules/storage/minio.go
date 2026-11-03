@@ -80,8 +80,8 @@ func convertMinioErr(err error, optMsg ...string) error {
 		return fmt.Errorf("%s: %w", optMsg[0], err)
 	}
 
-	errResp, ok := errors.AsType[minio.ErrorResponse](err)
-	if !ok {
+	var errResp minio.ErrorResponse
+	if !errors.As(err, &errResp) {
 		return wrapErr(err)
 	}
 

@@ -244,8 +244,8 @@ func (ctx *Context) JSONOK() {
 	ctx.JSON(http.StatusOK, map[string]any{"ok": true}) // this is only a dummy response, frontend seldom uses it
 }
 
-func buildJsonErrorMap[T string | template.HTML](msg T) map[string]any {
-	switch v := any(msg).(type) {
+func buildJsonErrorMap(msg any) map[string]any {
+	switch v := msg.(type) {
 	case string:
 		return map[string]any{"errorMessage": v, "renderFormat": "text"}
 	case template.HTML:
@@ -273,11 +273,11 @@ func (ctx *Context) JSONErrorAuto(err error) {
 	ctx.JSON(http.StatusInternalServerError, buildJsonErrorMap(userErrorMsg))
 }
 
-func (ctx *Context) JSONError[T string | template.HTML](msg T) {
+func (ctx *Context) JSONError(msg any) {
 	ctx.JSON(http.StatusBadRequest, buildJsonErrorMap(msg))
 }
 
-func (ctx *Context) JSONErrorWithField[T string | template.HTML](msg T, field string) {
+func (ctx *Context) JSONErrorWithField(msg any, field string) {
 	m := buildJsonErrorMap(msg)
 	m["errorFields"] = []string{field}
 	ctx.JSON(http.StatusBadRequest, m)

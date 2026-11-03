@@ -214,8 +214,8 @@ func preReceiveBranch(ctx *preReceiveContext, oldCommitID, newCommitID string, r
 	if len(globs) > 0 {
 		_, err := pull_service.CheckFileProtection(ctx, gitRepo, branchName, oldCommitID, newCommitID, globs, 1, ctx.env)
 		if err != nil {
-			errFilePathProtected, ok := errors.AsType[pull_service.ErrFilePathProtected](err)
-			if !ok {
+			var errFilePathProtected pull_service.ErrFilePathProtected
+			if !errors.As(err, &errFilePathProtected) {
 				ctx.PrivateInternalErrorf("Unable to check file protection for commits from %s to %s: %v", oldCommitID, newCommitID, err)
 				return
 			}

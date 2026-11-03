@@ -183,7 +183,8 @@ func RunMainApp(app *cli.Command, args ...string) error {
 	if err == nil {
 		return nil
 	}
-	if _, ok := errors.AsType[usageErr](err); ok {
+	var errUsage usageErr
+	if errors.As(err, &errUsage) {
 		cli.OsExiter(1) // cliOnUsageError already reported it
 		return err
 	}

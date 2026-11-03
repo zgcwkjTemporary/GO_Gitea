@@ -33,9 +33,10 @@ func IsAuthenticationError(err error) bool {
 	if gitcmd.IsStderr(err, gitcmd.StderrAuthenticationFailed, gitcmd.StderrCouldNotReadUsername) {
 		return true
 	}
-	if bbsErr, ok := errors.AsType[*bbsStatusError](err); ok {
+	var bbsErr *bbsStatusError
+	if errors.As(err, &bbsErr) {
 		return bbsErr.isAuthError()
 	}
-	githubErr, ok := errors.AsType[*github.ErrorResponse](err)
-	return ok && githubErr.Response != nil && githubErr.Response.StatusCode == http.StatusUnauthorized
+	var githubErr *github.ErrorResponse
+	return errors.As(err, &githubErr) && githubErr.Response != nil && githubErr.Response.StatusCode == http.StatusUnauthorized
 }

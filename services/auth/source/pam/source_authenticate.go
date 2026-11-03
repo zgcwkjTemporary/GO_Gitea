@@ -7,7 +7,6 @@ import (
 	"context"
 	"fmt"
 	"strings"
-	"uuid"
 
 	audit_model "gitea.dev/models/audit"
 	"gitea.dev/models/auth"
@@ -16,6 +15,8 @@ import (
 	"gitea.dev/modules/optional"
 	"gitea.dev/modules/setting"
 	"gitea.dev/services/audit"
+
+	"github.com/google/uuid"
 )
 
 // Authenticate queries if login/password is valid against the PAM,

@@ -14,7 +14,6 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
-	"uuid"
 
 	"gitea.dev/models/db"
 	git_model "gitea.dev/models/git"
@@ -39,6 +38,8 @@ import (
 	"gitea.dev/modules/util"
 	issue_service "gitea.dev/services/issue"
 	notify_service "gitea.dev/services/notify"
+
+	"github.com/google/uuid"
 )
 
 // getMergeMessage composes the message used when merging a pull request.
@@ -305,7 +306,7 @@ func hasPullRequestCommitBeenMerged(ctx context.Context, pr *issues_model.PullRe
 // Merge merges pull request to base repository.
 // Caller should check PR is ready to be merged (review and status checks)
 func Merge(outerCtx context.Context, prID int64, doer *user_model.User, mergeStyle repo_model.MergeStyle, expectedHeadCommitID, message string, wasAutoMerged bool) error {
-	outerCtxId := uuid.NewV4().String()
+	outerCtxId := uuid.New().String()
 
 	_, outerSpan := gtprof.GetTracer().Start(outerCtx, gtprof.TraceSpanContext)
 	outerSpan.SetAttributeString("context.trace-id", outerCtxId) // this attribute is only used internally for debugging purpose

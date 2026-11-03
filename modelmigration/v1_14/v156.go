@@ -107,7 +107,8 @@ func FixPublisherIDforTagReleases(ctx context.Context, x base.EngineMigration) e
 
 			commit, err := gitRepo.GetTagCommit(ctx, release.TagName)
 			if err != nil {
-				if errNotExist, ok := errors.AsType[git.ErrNotExist](err); ok {
+				var errNotExist git.ErrNotExist
+				if errors.As(err, &errNotExist) {
 					log.Warn("Unable to find commit %s for Tag: %s in [%d]%s/%s. Cannot update publisher ID.", errNotExist.ID, release.TagName, repo.ID, repo.OwnerName, repo.Name)
 					continue
 				}
@@ -119,7 +120,8 @@ func FixPublisherIDforTagReleases(ctx context.Context, x base.EngineMigration) e
 				log.Warn("Tag: %s in Repo[%d]%s/%s does not have a tagger.", release.TagName, repo.ID, repo.OwnerName, repo.Name)
 				commit, err = gitRepo.GetCommit(ctx, commit.ID.String())
 				if err != nil {
-					if errNotExist, ok := errors.AsType[git.ErrNotExist](err); ok {
+					var errNotExist git.ErrNotExist
+					if errors.As(err, &errNotExist) {
 						log.Warn("Unable to find commit %s for Tag: %s in [%d]%s/%s. Cannot update publisher ID.", errNotExist.ID, release.TagName, repo.ID, repo.OwnerName, repo.Name)
 						continue
 					}

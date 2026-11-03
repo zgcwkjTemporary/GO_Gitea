@@ -36,7 +36,8 @@ var verifiedRunnerTokens, _ = lru.New[runnerTokenHash, [sha256.Size]byte](10000)
 func withErrorMessages(next connect.ServerFunc) connect.ServerFunc {
 	return func(ctx context.Context, spec connect.Spec, stream connect.ServerStream) error {
 		err := next(ctx, spec, stream)
-		if _, ok := errors.AsType[*connect.Error](err); err == nil || ok {
+		var connectErr *connect.Error
+		if err == nil || errors.As(err, &connectErr) {
 			return err
 		}
 		return connect.NewError(connect.CodeUnknown, err.Error()).WithCause(err)

@@ -8,7 +8,6 @@ import (
 	"encoding/gob"
 	"net/http"
 	"sync"
-	"uuid"
 
 	"gitea.dev/models/auth"
 	"gitea.dev/models/db"
@@ -16,6 +15,7 @@ import (
 	"gitea.dev/modules/optional"
 	"gitea.dev/modules/setting"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/goth/gothic"
 )

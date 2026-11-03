@@ -438,7 +438,8 @@ func (d *BitbucketServerDownloader) GetRepoInfo(ctx context.Context) (*base.Repo
 		DisplayID string `json:"displayId"`
 	}
 	if _, err := d.callAPI(ctx, d.repoPath()+"/default-branch", nil, &branch); err != nil {
-		if statusErr, ok := errors.AsType[*bbsStatusError](err); !ok || statusErr.Status != http.StatusNotFound {
+		var statusErr *bbsStatusError
+		if !errors.As(err, &statusErr) || statusErr.Status != http.StatusNotFound {
 			return nil, err
 		}
 	}

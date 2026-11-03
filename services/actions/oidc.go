@@ -16,7 +16,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"uuid"
 
 	actions_model "gitea.dev/models/actions"
 	repo_model "gitea.dev/models/repo"
@@ -28,6 +27,7 @@ import (
 	"gitea.dev/services/oauth2_provider"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 const OIDCSigningAlgorithm = "RS256"

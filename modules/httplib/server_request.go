@@ -262,7 +262,8 @@ func IsClientOrNetworkError(ctx context.Context, err error) bool {
 	}
 
 	// network error
-	if _, ok := errors.AsType[net.Error](err); ok {
+	var netErr net.Error
+	if errors.As(err, &netErr) {
 		return true
 	}
 	return false

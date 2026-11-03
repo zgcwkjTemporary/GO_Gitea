@@ -49,14 +49,16 @@ func NewRunStdError(err error, stderr string) RunStdError {
 }
 
 func ErrorAsStderr(err error) (string, bool) {
-	if runErr, ok := errors.AsType[RunStdError](err); ok {
+	var runErr RunStdError
+	if errors.As(err, &runErr) {
 		return runErr.Stderr(), true
 	}
 	return "", false
 }
 
 func IsErrorExitCode(err error, code int) bool {
-	if exitError, ok := errors.AsType[*exec.ExitError](err); ok {
+	var exitError *exec.ExitError
+	if errors.As(err, &exitError) {
 		return exitError.ExitCode() == code
 	}
 	return false
@@ -155,7 +157,8 @@ func wrapPipelineError(err error) error {
 }
 
 func UnwrapPipelineError(err error) (error, bool) { //nolint:revive // this is for error unwrapping
-	if pe, ok := errors.AsType[pipelineError](err); ok {
+	var pe pipelineError
+	if errors.As(err, &pe) {
 		return pe.error, true
 	}
 	return nil, false

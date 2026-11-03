@@ -70,12 +70,12 @@ func IsEmailDomainListed(globs []glob.Glob, email string) bool {
 		return false
 	}
 
-	localPart, domain, found := strings.CutLast(email, "@")
-	if !found || localPart == "" {
+	n := strings.LastIndex(email, "@")
+	if n <= 0 {
 		return false
 	}
 
-	domain = strings.ToLower(domain)
+	domain := strings.ToLower(email[n+1:])
 
 	for _, g := range globs {
 		if g.Match(domain) {

@@ -584,7 +584,8 @@ func PutManifest(ctx *context.Context) {
 
 	digest, err := processManifest(ctx, mci, buf)
 	if err != nil {
-		if namedError, ok := errors.AsType[*namedError](err); ok {
+		var namedError *namedError
+		if errors.As(err, &namedError) {
 			apiErrorDefined(ctx, namedError)
 		} else if errors.Is(err, container_model.ErrContainerBlobNotExist) {
 			apiErrorDefined(ctx, errBlobUnknown)

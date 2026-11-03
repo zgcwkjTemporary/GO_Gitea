@@ -25,8 +25,8 @@ func TestPlainErrorReachesRunnerAsUnknownWithMessage(t *testing.T) {
 
 	client := runnerv1connect.NewRunnerServiceClient(connect.NewClient(connecthttp.NewTransport(server.Client(), server.URL)))
 	_, err := client.Register(t.Context(), &runnerv1.RegisterRequest{})
-	connectErr, ok := errors.AsType[*connect.Error](err)
-	require.True(t, ok)
+	var connectErr *connect.Error
+	require.True(t, errors.As(err, &connectErr))
 	assert.Equal(t, connect.CodeUnknown, connectErr.Code())
 	assert.Equal(t, "missing runner token, name", connectErr.Message())
 }

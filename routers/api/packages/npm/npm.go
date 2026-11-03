@@ -179,7 +179,8 @@ func UploadPackage(ctx *context.Context) {
 	// about the npmjs and GitHub Packages limit, fits base64 tarballs up to ~200 MB
 	npmPackage, deprecation, err := npm_module.ParseUpload(http.MaxBytesReader(ctx.Resp, ctx.Req.Body, 256*1024*1024))
 	if err != nil {
-		if _, ok := errors.AsType[*http.MaxBytesError](err); ok {
+		var maxBytesError *http.MaxBytesError
+		if errors.As(err, &maxBytesError) {
 			apiError(ctx, http.StatusRequestEntityTooLarge, err)
 		} else if errors.Is(err, util.ErrInvalidArgument) {
 			apiError(ctx, http.StatusBadRequest, err)

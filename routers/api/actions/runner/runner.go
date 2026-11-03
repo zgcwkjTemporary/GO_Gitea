@@ -8,7 +8,6 @@ import (
 	"errors"
 	"net/http"
 	"slices"
-	"uuid"
 
 	runnerv1 "gitea.dev/actionslib/runner/v1"
 	"gitea.dev/actionslib/runner/v1/runnerv1connect"
@@ -22,6 +21,7 @@ import (
 
 	"connectrpc.com/connect/v2"
 	"connectrpc.com/connect/v2/connecthttp"
+	gouuid "github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
@@ -76,7 +76,7 @@ func (s *Service) Register(
 	// create new runner
 	name := util.EllipsisDisplayString(req.Name, 255)
 	runner := &actions_model.ActionRunner{
-		UUID:                 uuid.New().String(),
+		UUID:                 gouuid.New().String(),
 		Name:                 name,
 		OwnerID:              runnerToken.OwnerID,
 		RepoID:               runnerToken.RepoID,

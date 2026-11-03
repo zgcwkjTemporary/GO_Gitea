@@ -254,10 +254,12 @@ func isTransientTransportError(err error) bool {
 	if errors.Is(err, policy.ErrDenied) {
 		return false
 	}
-	if _, ok := errors.AsType[*tls.CertificateVerificationError](err); ok {
+	var certErr *tls.CertificateVerificationError
+	if errors.As(err, &certErr) {
 		return false
 	}
-	if dnsErr, ok := errors.AsType[*net.DNSError](err); ok {
+	var dnsErr *net.DNSError
+	if errors.As(err, &dnsErr) {
 		return !dnsErr.IsNotFound
 	}
 	return true

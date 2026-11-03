@@ -146,11 +146,11 @@ func (ref RefName) PullIndex() (int64, bool) {
 	if !ok {
 		return 0, false
 	}
-	pullStr, last, ok := strings.CutLast(s, "/")
-	if !ok || last != "head" {
+	pos := strings.LastIndexByte(s, '/')
+	if pos < 0 || s[pos+1:] != "head" {
 		return 0, false
 	}
-	pullIndex, err := strconv.ParseInt(pullStr, 10, 64)
+	pullIndex, err := strconv.ParseInt(s[:pos], 10, 64)
 	if err != nil {
 		return 0, false
 	}

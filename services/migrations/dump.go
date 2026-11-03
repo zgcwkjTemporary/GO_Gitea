@@ -13,7 +13,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"uuid"
 
 	user_model "gitea.dev/models/user"
 	"gitea.dev/modules/git"
@@ -26,6 +25,7 @@ import (
 	"gitea.dev/modules/structs"
 
 	"go.yaml.in/yaml/v4"
+	"github.com/google/uuid"
 )
 
 var _ base.Uploader = &RepositoryDumper{}
